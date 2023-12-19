@@ -1,5 +1,7 @@
 import React from "react";
 import styled from "styled-components";
+import ListBox from "./ClubBox";
+import club from "../../static/data/club.json"
 
 function SearchingMenu() {
     return(
@@ -13,7 +15,12 @@ function SearchingMenu() {
 
 function ClubMenu(){
     return(
-        <MenuArea></MenuArea>
+        <ClubArea>
+            {/*<ListBox margin-top={"16px"}></ListBox>*/}
+            {club.map((data: any) => {
+                return <ListBox name={data.name} description={data.description}></ListBox>
+            })}
+        </ClubArea>
     )
 }
 
@@ -21,7 +28,6 @@ export {SearchingMenu, ClubMenu};
 
 const MenuArea = styled.div`
   width: 366px;
-  height: 260px;
 `
 
 const StartingPointBox = styled.input`
@@ -74,4 +80,12 @@ const FindingWayBox = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+`
+
+const ClubArea = styled.div`
+  width: 366px;
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 `
