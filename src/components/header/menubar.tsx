@@ -2,18 +2,26 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import findingWay from "../../static/logo/findingWay.svg";
 import club from "../../static/logo/club.svg";
-import {SearchingMenu, ClubMenu} from "./menu";
+import {SearchingMenu, ClubMenu} from "./menuDetail";
+
+function setColor (newColor: any){
+    document.documentElement.style.setProperty('--logo-color', newColor);
+}
 
 function MenubarArea() {
     const [isFindingWayToggled, setIsFindingWayToggled] = useState<boolean>(false);
     const [isClubToggled, setIsClubToggled] = useState<boolean>(false);
+
     return (
         <MenubarContainer>
             <Menubar>
                 <Menu src={findingWay}
                       onClick={()=>{
                           setIsFindingWayToggled(!isFindingWayToggled)
-                          setIsClubToggled(false)}}/>
+                          setIsClubToggled(false)
+                          setColor('orange')
+                      }}
+                />
                 <Menu src={club}
                       onClick={()=>{
                           setIsClubToggled(!isClubToggled)
@@ -47,7 +55,8 @@ const Menubar = styled.div`
   flex-direction: column;
 `
 const Menu = styled.img`
-    cursor: pointer;
+  cursor: pointer;
+  fill: var(--logo-color, aqua);
 `
 
 const MenuDetailArea = styled.div`
