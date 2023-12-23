@@ -1,13 +1,24 @@
-import React from "react";
+import React, {useState} from "react";
 import styled from "styled-components";
 import ListBox from "./ClubBox";
 import club from "../../static/data/club.json"
+import RecommendHandler from "../../handler/handler"
 
 function SearchingMenu() {
+    const [input1, setInput1] = useState<string>('')
+    const [input2, setInput2] = useState<string>('')
+    const handleChange1 = (e:any) => {
+        setInput1(e.target.value);
+        RecommendHandler(e.target.value)
+    }
+    const handleChange2 = (e:any) => {
+        setInput2(e.target.value);
+        RecommendHandler(e.target.value)
+    }
     return(
         <MenuArea>
-            <StartingPointBox type="text" placeholder={"출발지를 입력하세요"}></StartingPointBox>
-            <EndPointBox type="text" placeholder={"도착지를 입력하세요"}></EndPointBox>
+            <StartingPointBox value={input1} type="text" placeholder={"출발지를 입력하세요"} onChange={handleChange1}></StartingPointBox>
+            <EndPointBox value={input2} type="text" placeholder={"도착지를 입력하세요"} onChange={handleChange2}></EndPointBox>
             <FindingWayBox>길찾기</FindingWayBox>
         </MenuArea>
     )
