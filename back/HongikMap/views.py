@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.http import JsonResponse
-# from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import ensure_csrf_cookie
+
 
 from . import features
 from . import suggest
@@ -10,7 +12,7 @@ from . import models
 
 import os
 
-
+import json
 # Create your views here.
 
 def welcome(request):
@@ -47,17 +49,34 @@ def date(request):
     return render(request, 'HongikMap/date.html', {})
 
 
+@csrf_exempt
+# @ensure_csrf_cookie
 def recommend(request):
-    response_name = request.POST.get('input_val')
-    print(response_name)
-    response_list = suggest.recommend(response_name)
-    # response_list.sort(key=lambda x: (int(x[1:]) if str(x[1:]).isdecimal() else str(x[1:]), x[0]))
-    return JsonResponse({"recommendations": response_list})
+    try:
+        data = json.loads(request.body.decode('utf-8'))
+        response_name = data.get('input_val')
 
+        if response_name is not None:
+            # Your logic with response_name
+            response_list = suggest.recommend(response_name)
+            return JsonResponse({"recommendations": response_list})
+        else:
+            return JsonResponse({"error": "Missing input_val parameter"}, status=400)
 
+    except json.JSONDecodeError:
+        return JsonResponse({"error": "Invalid JSON data"}, status=400)
+    # response_name = request.POST.get('input_val')
+    # print(response_name)
+    # response_list = suggest.recommend(response_name)
+    # # response_list.sort(key=lambda x: (int(x[1:]) if str(x[1:]).isdecimal() else str(x[1:]), x[0]))
+    # return JsonResponse({"recommendations": response_list})
+
+@csrf_exempt
 def submit(request):
-    departure = request.POST.get('departure')
-    destination = request.POST.get('destination')
+    request = json.loads(request.body.decode('utf-8'))
+    departure = request.get('departure')
+    destination = request.get('destination')
+    print(departure, destination)
 
     departure_node = utility.recommend2node(departure)
     destination_node = utility.recommend2node(destination)
