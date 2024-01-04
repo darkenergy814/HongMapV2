@@ -4,7 +4,6 @@ import styled from "styled-components";
 interface ClubProps {
     name: string;
     description: string;
-    // children?: React.ReactNode; // 👈️ for demo purposes
 }
 
 function ListBox(props: ClubProps) {

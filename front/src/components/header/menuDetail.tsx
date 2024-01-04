@@ -1,25 +1,34 @@
 import React, {useState} from "react";
 import styled from "styled-components";
-import ListBox from "./ClubBox";
+import ListBox from "./clubBox";
 import club from "../../static/data/club.json"
-import RecommendHandler from "../../handler/handler"
+import {SelectBox} from "../selectBox/selectBox"
+import {SubmitHandler} from "../../handler/handler";
+import {departure, destination, navResult} from "./searchingMenu/store";
 
 function SearchingMenu() {
-    const [input1, setInput1] = useState<string>('')
-    const [input2, setInput2] = useState<string>('')
-    const handleChange1 = (e:any) => {
-        setInput1(e.target.value);
-        RecommendHandler(e.target.value)
+    const [departureValue, setDeparture] = useState('');
+    const [destinationValue, setDestination] = useState('');
+    const getDeparture = (departure: string) => {
+        setDeparture(departure)
     }
-    const handleChange2 = (e:any) => {
-        setInput2(e.target.value);
-        RecommendHandler(e.target.value)
+    const getDestination = (destination: string) => {
+        setDestination(destination)
+    }
+
+    function getSubmit(){
+        console.log(SubmitHandler(departureValue, destinationValue));
     }
     return(
         <MenuArea>
-            <StartingPointBox value={input1} type="text" placeholder={"출발지를 입력하세요"} onChange={handleChange1}></StartingPointBox>
-            <EndPointBox value={input2} type="text" placeholder={"도착지를 입력하세요"} onChange={handleChange2}></EndPointBox>
-            <FindingWayBox>길찾기</FindingWayBox>
+            <StartpointArea>
+                <SelectBox placeholder={"출발지를 입력하세요"} getValue={getDeparture}></SelectBox>
+            </StartpointArea>
+            <EndpointArea>
+                <SelectBox placeholder={"도착지를 입력하세요"} getValue={getDestination}></SelectBox>
+            </EndpointArea>
+
+            <FindingWayBox onClick={() => getSubmit()}>길찾기</FindingWayBox>
         </MenuArea>
     )
 }
@@ -39,40 +48,19 @@ export {SearchingMenu, ClubMenu};
 
 const MenuArea = styled.div`
   width: 366px;
+  height: 260px;
 `
 
-const StartingPointBox = styled.input`
+const StartpointArea = styled.div`
   position: absolute;
+  top: 18px;
   left: 35px;
-  Top: 18px;
-  width: 297px;
-  height: 55px;
-  border: none;
-  border-radius: 16px;
-  color: #BCBCBC;
-  &::placeholder {
-    color: #BCBCBC;
-  }
-  font-size: medium;
-  background-color: #F3F4FF;
-  text-align: center;
 `
 
-const EndPointBox = styled.input`
+const EndpointArea = styled.div`
   position: absolute;
+  top: 83px;
   left: 35px;
-  Top: 83px;
-  width: 297px;
-  height: 55px;
-  border: none;
-  border-radius: 16px;
-  color: #BCBCBC;
-  &::placeholder {
-    color: #BCBCBC;
-  }
-  font-size: medium;
-  background-color: #F3F4FF;
-  text-align: center;
 `
 
 const FindingWayBox = styled.div`
